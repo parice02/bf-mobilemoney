@@ -1,8 +1,8 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
-setup(name='dist_alx',
-      version='0.0',
-      description='Gaussian and Binomial distributions',
-      packages=['dist_alx'],
-      author_email='mihajlovic.aleksa@gmail.com',
+setup(name='bf-mobilemoney',
+      version='0.0.1',
+      description='',
+      packages=find_packages(),
+      author_email='parice02@hotmail.com',
       zip_safe=False)
