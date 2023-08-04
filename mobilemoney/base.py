@@ -22,11 +22,11 @@ class BasePayment(object):
     def phonenumber(self):
         return self._phonenumber
 
-    @phonenumber.setter()
+    @phonenumber.setter
     def phonenumber(self, value):
         self._phonenumber = value
 
-    @phonenumber.deleter()
+    @phonenumber.deleter
     def phonenumber(self):
         del self._phonenumber
 
@@ -34,11 +34,11 @@ class BasePayment(object):
     def username(self):
         return self._username
 
-    @username.setter()
+    @username.setter
     def username(self, value):
         self._username = value
 
-    @username.deleter()
+    @username.deleter
     def username(self):
         del self._username
 
@@ -46,10 +46,10 @@ class BasePayment(object):
     def password(self):
         return self._password
 
-    @password.setter()
+    @password.setter
     def password(self, value):
         self._password = value
 
-    @password.deleter()
+    @password.deleter
     def password(self):
         del self._password

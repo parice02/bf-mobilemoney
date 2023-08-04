@@ -3,7 +3,7 @@ from typing import Any, List, Union, Dict
 import requests  # TODO replace with urllib3
 from requests.auth import HTTPBasicAuth
 
-from base import BasePayment
+from .base import BasePayment
 
 onatel_dev_url = "https://196.28.245.227/tlcfzc_gw/api/gateway/3pp/transaction/process"
 onatel_prod_url = (
@@ -28,11 +28,11 @@ class GenericPayment(BasePayment):
     def url(self):
         return self._url
 
-    @url.setter()
+    @url.setter
     def url(self, value):
         self._url = value
 
-    @url.deleter()
+    @url.deleter
     def url(self):
         del self._url
 
@@ -40,7 +40,7 @@ class GenericPayment(BasePayment):
         self,
         customer_phone: str,
         customer_otp: str,
-        amount: str,
+        amount: int,
         libel: str,
         otp_trans_id: str,
     ):
@@ -59,7 +59,7 @@ class GenericPayment(BasePayment):
         }
 
     def _send_otp(
-        self, customer_phone: str, amount: str | int, verify_ssl=False, option=""
+        self, customer_phone: str, amount: int, verify_ssl=False, option=""
     ):
         if option not in SEND_OTP_OPTIONS:
             raise ValueError(
@@ -68,7 +68,7 @@ class GenericPayment(BasePayment):
         data = {
             "request-id": "",
             "destination": f"226{customer_phone}",
-            "amount": int(amount),
+            "amount": amount,
             "remarks": "Merchant Payment with OTP",
             "extended-data": {"module": "MERCHOTPPAY"},
         }
@@ -88,17 +88,17 @@ class GenericPayment(BasePayment):
 
         return response.json()
 
-    def send_otp(self, customer_phone: str, amount: str | int, verify_ssl=False):
+    def send_otp(self, customer_phone: str, amount: int, verify_ssl=False):
         return self._send_otp(customer_phone, amount, verify_ssl, SEND_OTP_OPTIONS[0])
 
-    def resend_otp(self, customer_phone: str, amount: str | int, verify_ssl=False):
+    def resend_otp(self, customer_phone: str, amount: int, verify_ssl=False):
         return self._send_otp(customer_phone, amount, verify_ssl, SEND_OTP_OPTIONS[1])
 
     def validate_payment(
         self,
         customer_phone: str,
         customer_otp: str,
-        amount: str,
+        amount: int,
         message: str,
         otp_trans_id,
         verify_ssl=False,

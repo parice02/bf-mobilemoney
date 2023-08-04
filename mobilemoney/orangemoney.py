@@ -3,11 +3,10 @@ from typing import Any, List, Union, Dict
 import xml.etree.ElementTree as ET
 import requests  # TODO replace with urllib3
 
-from base import BasePayment
+from .base import BasePayment
 
 orange_dev_url = "https://testom.orange.bf:9008/payment"
 orange_prod_url = "https://apiom.orange.bf:9007/payment"
-
 
 class GenericPayment(BasePayment):
     def __init__(self, url="", phonenumber="", username="", password=""):
@@ -21,16 +20,16 @@ class GenericPayment(BasePayment):
     def url(self):
         return self._url
 
-    @url.setter()
+    @url.setter
     def url(self, value):
         self._url = value
 
-    @url.deleter()
+    @url.deleter
     def url(self):
         del self._url
 
     def parse_query(
-        self, customer_phone: str, customer_otp: str, amount: str, libel: str
+        self, customer_phone: str, customer_otp: str, amount: int, libel: str
     ):
         root = ET.Element("COMMAND")
 
@@ -89,7 +88,7 @@ class GenericPayment(BasePayment):
         self,
         customer_phone: str,
         customer_otp: str,
-        amount: str,
+        amount: int,
         message: str,
         verify_ssl=True,
     ):
