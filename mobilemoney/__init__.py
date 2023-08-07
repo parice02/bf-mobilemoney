@@ -18,7 +18,7 @@ def validate_om_prod_payment(
     phonenumber: str,
     customer_phone: str,
     customer_otp: str,
-    amount: str,
+    amount: int,
     message: str,
 ):
     payment = OMPayment(phonenumber, username, password)
@@ -31,7 +31,7 @@ def validate_om_dev_payment(
     phonenumber: str,
     customer_phone: str,
     customer_otp: str,
-    amount: str,
+    amount: int,
     message: str,
 ):
     payment = OMDevPayment(phonenumber, username, password)
