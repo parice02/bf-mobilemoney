@@ -53,7 +53,7 @@ class GenericPayment(BasePayment):
 
         return xml_string
 
-    def parse_result(result: str):
+    def parse_result(self, result: str):
         import re
 
         # root = ET.Element("result")
