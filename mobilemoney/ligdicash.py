@@ -2,6 +2,7 @@ from typing import Any, List, Union, Dict
 
 import requests  # TODO replace with urllib3
 from requests.auth import HTTPBasicAuth
+import webbrowser
 
 from .base import BasePayment
 
@@ -89,7 +90,10 @@ class GenericPaymentWithRedirect(BasePayment):
             json={"commande": command},
             verify=verify_ssl,
         )
-        return response.json()
+        response = response.json()
+        response = webbrowser.open(response["response_text"], new=2)
+
+        return response
 
     @property
     def url(self):
