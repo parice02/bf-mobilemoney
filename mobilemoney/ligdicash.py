@@ -1,7 +1,6 @@
 from typing import Any, List, Union, Dict
 
 import requests  # TODO replace with urllib3
-from requests.auth import HTTPBasicAuth
 import webbrowser
 
 from .base import BasePayment
@@ -15,7 +14,7 @@ ligdicash_prod_url_with_redirect = (
 
 
 class GenericPaymentWithRedirect(BasePayment):
-    def __init__(self, url="", username="", password=""):
+    def __init__(self, url: str = "", username="", password=""):
         super().__init__(None, username, password)
 
         if not isinstance(url, str):

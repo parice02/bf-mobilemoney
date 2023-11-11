@@ -4,7 +4,7 @@ from typing import Any, List, Union, Dict
 class BasePayment(object):
     """ """
 
-    def __init__(self, phonenumber="", username="", password=""):
+    def __init__(self, phonenumber: str = "", username: str = "", password: str = ""):
         if not isinstance(phonenumber, str):
             raise ValueError("value 'phonenumber' must be type of 'str'")
 
