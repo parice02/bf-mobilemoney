@@ -5,7 +5,7 @@ class BasePayment(object):
     """ """
 
     def __init__(self, phonenumber: str = "", username: str = "", password: str = ""):
-        if not isinstance(phonenumber, str):
+        if phonenumber is not None and not isinstance(phonenumber, str):
             raise ValueError("value 'phonenumber' must be type of 'str'")
 
         if not isinstance(username, str):

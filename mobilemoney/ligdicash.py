@@ -14,14 +14,14 @@ ligdicash_prod_url_with_redirect = (
 
 
 class GenericPaymentWithRedirect(BasePayment):
-    def __init__(self, url: str = "", username="", password=""):
+    def __init__(self, url="", username="", password=""):
         super().__init__(None, username, password)
 
         if not isinstance(url, str):
             raise ValueError("value 'url' must be type of 'str'")
         self._url = url
 
-    def validate_payment(self, command={}, verify_ssl=False):
+    def validate_payment(self, command={}, verify_ssl=True):
         """
         Validate a payment
             - command param must be :
@@ -94,6 +94,27 @@ class GenericPaymentWithRedirect(BasePayment):
 
         return response
 
+    def verify_token(self, token, verify_ssl=True):
+        headers = {
+            "content-type": "application/json",
+            "Apikey": self._username,
+            "authorization": f"Bearer {self._password}",
+            "accept": "application/json",
+        }
+        response = requests.get(
+            "https://app.ligdicash.com/pay/v01/redirect/checkout-invoice/confirm/",
+            data={"invoiceToken": token},
+            headers=headers,
+            verify=verify_ssl,
+        )
+
+        if response["status"] == "completed":
+            return
+        if response["status"] == "nocompleted":
+            return
+        if response["status"] == "pending":
+            return
+
     @property
     def url(self):
         return self._url
@@ -108,6 +129,5 @@ class GenericPaymentWithRedirect(BasePayment):
 
 
 class Payment(GenericPaymentWithRedirect):
-    def __init__(self, phonenumber="", username="", password=""):
-        url = ligdicash_prod_url_with_redirect
-        super().__init__(url, phonenumber, username, password)
+    def __init__(self, username="", password=""):
+        super().__init__(ligdicash_prod_url_with_redirect, username, password)
