@@ -38,7 +38,7 @@ command = {
         "callback_url": "http://localhost",
     },
     "custom_data": {
-        "transaction_id": trans_id,  # montant à générer
+        "transaction_id": trans_id,  # id à générer
         # "logfile": "202110210048426170b8ea884a9",
         # "developpeur": "kaboretidiane",
     },

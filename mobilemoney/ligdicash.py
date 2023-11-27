@@ -109,11 +109,11 @@ class GenericPaymentWithRedirect(BasePayment):
         )
 
         if response["status"] == "completed":
-            return
+            return True
         if response["status"] == "nocompleted":
-            return
+            return False
         if response["status"] == "pending":
-            return
+            return None
 
     @property
     def url(self):
