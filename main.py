@@ -22,9 +22,9 @@ command = {
         "devise": "XOF",
         "description": " Description du contenu de la facture(Achat de jus de fruits)",
         "customer": "+22664712648",
-        # "customer_firstname": "Nom du client",
-        # "customer_lastname": "Prénom du client",
-        # "customer_email": "tester@gligdicash.com",
+        "customer_firstname": "Nom du client",
+        "customer_lastname": "Prénom du client",
+        "customer_email": "tester@gligdicash.com",
         # "external_id": "",
         # "otp": "",
     },
@@ -46,8 +46,12 @@ command = {
 
 
 response = validate_ligdicash_payment(
-    api_key="SUGSFAKICRVXD1OSH",
+    api_key="SUGSFAKICRVXD1OSH",  # SUGSFAKICRVXD1OSH
     api_token="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZF9hcHAiOiIxMjQ5NiIsImlkX2Fib25uZSI6MzUzNDYyLCJkYXRlY3JlYXRpb25fYXBwIjoiMjAyMy0xMS0xMCAxNDo1NTo0NCJ9.vlSBW5zvwMAAaupXZrZi5GRrf79Ctuka6Rz1Uprbf54",
     command=command,
 )
 print(response)
+
+"""
+eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZF9hcHAiOiIxMjQ5NiIsImlkX2Fib25uZSI6MzUzNDYyLCJkYXRlY3JlYXRpb25fYXBwIjoiMjAyMy0xMS0xMCAxNDo1NTo0NCJ9.vlSBW5zvwMAAaupXZrZi5GRrf79Ctuka6Rz1Uprbf54
+"""

@@ -77,10 +77,10 @@ class GenericPaymentWithRedirect(BasePayment):
                 }
         """
         headers = {
-            "content-type": "application/json",
+            "Content-Type": "application/json",
             "Apikey": self._username,
-            "authorization": f"Bearer {self._password}",
-            "accept": "application/json",
+            "Authorization": f"Bearer {self._password}",
+            "Accept": "application/json",
         }
 
         response = requests.post(
