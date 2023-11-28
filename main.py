@@ -1,5 +1,6 @@
 from datetime import datetime
 from random import randint
+import webbrowser
 
 from mobilemoney import validate_ligdicash_payment
 
@@ -46,10 +47,13 @@ command = {
 
 
 response = validate_ligdicash_payment(
-    api_key="SUGSFAKICRVXD1OSH",  # SUGSFAKICRVXD1OSH
-    api_token="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZF9hcHAiOiIxMjQ5NiIsImlkX2Fib25uZSI6MzUzNDYyLCJkYXRlY3JlYXRpb25fYXBwIjoiMjAyMy0xMS0xMCAxNDo1NTo0NCJ9.vlSBW5zvwMAAaupXZrZi5GRrf79Ctuka6Rz1Uprbf54",
+    api_key="TKC8O8BX9TAA8EL0G",  # SUGSFAKICRVXD1OSH
+    api_token="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZF9hcHAiOiIxMjgyMSIsImlkX2Fib25uZSI6MzUzNDYyLCJkYXRlY3JlYXRpb25fYXBwIjoiMjAyMy0xMS0yOCAwOToyMzo0MiJ9.zr8Vs1vZgkPSJIfjhvDfnEtGv2qZrvQvx4BKFGJKxP8",
     command=command,
 )
+print(response)
+response = webbrowser.open_new_tab(response["response_text"])
+
 print(response)
 
 """

@@ -1,7 +1,7 @@
 from typing import Any, List, Union, Dict
 
 import requests  # TODO replace with urllib3
-import webbrowser
+
 
 from .base import BasePayment
 
@@ -90,8 +90,6 @@ class GenericPaymentWithRedirect(BasePayment):
             verify=verify_ssl,
         )
         response = response.json()
-        response = webbrowser.open(response["response_text"], new=2)
-
         return response
 
     def verify_token(self, token, verify_ssl=True):
