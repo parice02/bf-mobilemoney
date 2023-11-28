@@ -33,7 +33,7 @@ command = {
         # "otp": "",
     },
     "store": {
-        "name": "Nom de votre site ou de votre boutique",
+         "name": "E-TIMBRE DGI",
         "website_url": "https://etimbre.dgi.bf",
     },
     "actions": {
@@ -43,7 +43,7 @@ command = {
     },
     "custom_data": {
         "transaction_id": trans_id,  # id à générer
-        # "Plateforme": "E-TIMBRE",
+        "Plateforme": "E-TIMBRE",
     },
 }
 
