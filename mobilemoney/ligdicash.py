@@ -82,15 +82,22 @@ class GenericPaymentWithRedirect(BasePayment):
             "Authorization": f"Bearer {self._password}",
             "Accept": "application/json",
         }
-
-        response = requests.post(
-            self._url,
-            headers=headers,
-            json={"commande": command},
-            verify=verify_ssl,
-        )
-        response = response.json()
-        return response
+ 
+        response_body = dict()
+        try:
+            response = requests.post(
+                self._url,
+                headers=headers,
+                json={"commande": command},
+                verify=verify_ssl,
+            )
+            response_body = response.content
+            response_body = json.loads(response_body)
+        except Exception as e:
+            print(e)
+            response_body = dict()
+        
+        return response_body
 
     def verify_token(self, token, verify_ssl=True):
         headers = {
@@ -99,13 +106,14 @@ class GenericPaymentWithRedirect(BasePayment):
             "authorization": f"Bearer {self._password}",
             "accept": "application/json",
         }
-        response = requests.get(
-            "https://app.ligdicash.com/pay/v01/redirect/checkout-invoice/confirm/",
-            data={"invoiceToken": token},
-            headers=headers,
-            verify=verify_ssl,
-        )
+        response_body = dict()
         try:
+            response = requests.get(
+                "https://app.ligdicash.com/pay/v01/redirect/checkout-invoice/confirm/",
+                data={"invoiceToken": token},
+                headers=headers,
+                verify=verify_ssl,
+            )
             response_body = response.content
             response_body = json.loads(response_body)
         except Exception as e:
