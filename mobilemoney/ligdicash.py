@@ -1,7 +1,7 @@
 from typing import Any, List, Union, Dict
 
 import requests  # TODO replace with urllib3
-
+import json
 
 from .base import BasePayment
 
@@ -105,13 +105,20 @@ class GenericPaymentWithRedirect(BasePayment):
             headers=headers,
             verify=verify_ssl,
         )
+        try:
+            response_body = response.content
+            response_body = json.loads(response_body)
+        except Exception as e:
+            print(e)
+            response_body = dict()
 
-        if response["status"] == "completed":
-            return True
-        if response["status"] == "nocompleted":
-            return False
-        if response["status"] == "pending":
-            return None
+        if response_body.get("status", '') == "completed":
+            return True, response
+        if response_body.get("status", '') == "nocompleted":
+            return False, response
+        if response_body.get("status", '') == "pending":
+            return None, response
+        return None, response
 
     @property
     def url(self):
