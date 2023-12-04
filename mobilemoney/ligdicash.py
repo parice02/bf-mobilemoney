@@ -1,18 +1,9 @@
 from typing import Any, List, Union, Dict
-from pprint import pprint
-import webbrowser
 
 import requests  # TODO replace with urllib3
 import json
 
 from .base import BasePayment
-
-ligdicash_dev_url_with_redirect = (
-    "https://app.ligdicash.com/pay/v01/redirect/checkout-invoice/create"
-)
-ligdicash_prod_url_with_redirect = (
-    "https://app.ligdicash.com/pay/v01/redirect/checkout-invoice/create"
-)
 
 
 class GenericPaymentWithRedirect(BasePayment):
@@ -101,7 +92,7 @@ class GenericPaymentWithRedirect(BasePayment):
 
         return response_body
 
-    def verify_token(self, token, verify_ssl=True):
+    def verify_token(self, url, token, verify_ssl=True):
         headers = {
             "content-type": "application/json",
             "Apikey": self._username,
@@ -111,7 +102,7 @@ class GenericPaymentWithRedirect(BasePayment):
         response_body = dict()
         try:
             response = requests.get(
-                "https://app.ligdicash.com/pay/v01/redirect/checkout-invoice/confirm/",
+                url,
                 data={"invoiceToken": token},
                 headers=headers,
                 verify=verify_ssl,
@@ -122,11 +113,11 @@ class GenericPaymentWithRedirect(BasePayment):
             print(e)
             response_body = dict()
 
-        if response_body.get("status", '') == "completed":
+        if response_body.get("status", "") == "completed":
             return True, response
-        if response_body.get("status", '') == "nocompleted":
+        if response_body.get("status", "") == "nocompleted":
             return False, response
-        if response_body.get("status", '') == "pending":
+        if response_body.get("status", "") == "pending":
             return None, response
         return None, response
 
@@ -144,6 +135,5 @@ class GenericPaymentWithRedirect(BasePayment):
 
 
 class Payment(GenericPaymentWithRedirect):
-    def __init__(self, url=None, username="", password=""):
-        url = ligdicash_prod_url_with_redirect if url is None else url
+    def __init__(self, url, username="", password=""):
         super().__init__(url, username, password)

@@ -24,7 +24,7 @@ def validate_moov_prod_payment(
     customer_otp: str,
     amount: int,
     message: str,
-    url=None,
+    url,
 ):
     payment = MMPayment(url, phonenumber, username, password)
     return payment.validate_payment(customer_phone, customer_otp, amount, message)
@@ -52,7 +52,7 @@ def validate_om_prod_payment(
     customer_otp: str,
     amount: int,
     message: str,
-    url=None,
+    url,
 ):
     payment = OMPayment(url, phonenumber, username, password)
     return payment.validate_payment(customer_phone, customer_otp, amount, message)
@@ -66,7 +66,7 @@ def validate_om_dev_payment(
     customer_otp: str,
     amount: int,
     message: str,
-    url=None,
+    url,
 ):
     payment = OMDevPayment(url, phonenumber, username, password)
     return payment.validate_payment(customer_phone, customer_otp, amount, message)
@@ -76,7 +76,7 @@ def validate_ligdicash_payment(
     api_key,
     api_token,
     command,
-    url=None,
+    url,
 ):
     """
     Validate a payment
@@ -136,6 +136,6 @@ def validate_ligdicash_payment(
     return payment.validate_payment(command)
 
 
-def verify_ligdicash_payment_token(api_key, api_token, payment_token, url=None):
+def verify_ligdicash_payment_token(api_key, api_token, payment_token, url):
     payment = LigdicashPaymentWithRedirect(url, username=api_key, password=api_token)
-    return payment.verify_token(payment_token)
+    return payment.verify_token(url, payment_token)

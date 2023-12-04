@@ -5,10 +5,6 @@ from requests.auth import HTTPBasicAuth
 
 from .base import BasePayment
 
-onatel_dev_url = "https://196.28.245.227/tlcfzc_gw/api/gateway/3pp/transaction/process"
-onatel_prod_url = (
-    "https://196.28.245.227/tlcfzc_gw_prod/mbs-gateway/gateway/3pp/transaction/process"
-)
 
 SEND_OTP_OPTIONS = [
     "process-create-mror-otp",
@@ -119,12 +115,10 @@ class GenericPayment(BasePayment):
 
 
 class DevPayment(GenericPayment):
-    def __init__(self, url=None, phonenumber="", username="", password=""):
-        url = onatel_dev_url if url is None else url
+    def __init__(self, url, phonenumber="", username="", password=""):
         super().__init__(url, phonenumber, username, password)
 
 
 class Payment(GenericPayment):
-    def __init__(self, url=None, phonenumber="", username="", password=""):
-        url = onatel_prod_url if url is None else url
+    def __init__(self, url, phonenumber="", username="", password=""):
         super().__init__(url, phonenumber, username, password)

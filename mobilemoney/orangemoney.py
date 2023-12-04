@@ -5,9 +5,6 @@ import requests  # TODO replace with urllib3
 
 from .base import BasePayment
 
-orange_dev_url = "https://testom.orange.bf:9008/payment"
-orange_prod_url = "https://apiom.orange.bf:9007/payment"
-
 
 class GenericPayment(BasePayment):
     def __init__(self, url="", phonenumber="", username="", password=""):
@@ -102,12 +99,10 @@ class GenericPayment(BasePayment):
 
 
 class DevPayment(GenericPayment):
-    def __init__(self, url=None, phonenumber="", username="", password=""):
-        url = orange_dev_url if url is None else url
+    def __init__(self, url, phonenumber="", username="", password=""):
         super().__init__(url, phonenumber, username, password)
 
 
 class Payment(GenericPayment):
-    def __init__(self, url=None, phonenumber="", username="", password=""):
-        url = orange_prod_url if url is None else url
+    def __init__(self, url, phonenumber="", username="", password=""):
         super().__init__(url, phonenumber, username, password)
