@@ -3,7 +3,7 @@ from pprint import pprint
 import webbrowser
 
 import requests  # TODO replace with urllib3
-
+import json
 
 from .base import BasePayment
 
@@ -85,17 +85,21 @@ class GenericPaymentWithRedirect(BasePayment):
             "Accept": "application/json",
         }
 
-        response = requests.post(
-            self._url,
-            headers=headers,
-            json={"commande": command},
-            verify=verify_ssl,
-        )
-        pprint(response.request.headers)
-        response = response.json()
-        response = webbrowser.open(response["response_text"], new=2)
+        response_body = dict()
+        try:
+            response = requests.post(
+                self._url,
+                headers=headers,
+                json={"commande": command},
+                verify=verify_ssl,
+            )
+            response_body = response.content
+            response_body = json.loads(response_body)
+        except Exception as e:
+            print(e)
+            response_body = dict()
 
-        return response
+        return response_body
 
     def verify_token(self, token, verify_ssl=True):
         headers = {
@@ -104,19 +108,27 @@ class GenericPaymentWithRedirect(BasePayment):
             "authorization": f"Bearer {self._password}",
             "accept": "application/json",
         }
-        response = requests.get(
-            "https://app.ligdicash.com/pay/v01/redirect/checkout-invoice/confirm/",
-            data={"invoiceToken": token},
-            headers=headers,
-            verify=verify_ssl,
-        )
+        response_body = dict()
+        try:
+            response = requests.get(
+                "https://app.ligdicash.com/pay/v01/redirect/checkout-invoice/confirm/",
+                data={"invoiceToken": token},
+                headers=headers,
+                verify=verify_ssl,
+            )
+            response_body = response.content
+            response_body = json.loads(response_body)
+        except Exception as e:
+            print(e)
+            response_body = dict()
 
-        if response["status"] == "completed":
-            return True
-        if response["status"] == "nocompleted":
-            return False
-        if response["status"] == "pending":
-            return None
+        if response_body.get("status", '') == "completed":
+            return True, response
+        if response_body.get("status", '') == "nocompleted":
+            return False, response
+        if response_body.get("status", '') == "pending":
+            return None, response
+        return None, response
 
     @property
     def url(self):
