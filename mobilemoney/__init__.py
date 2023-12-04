@@ -135,6 +135,7 @@ def validate_ligdicash_payment(
     payment = LigdicashPaymentWithRedirect(url, username=api_key, password=api_token)
     return payment.validate_payment(command)
 
-def verify_ligdicash_payment_token(api_key, api_token, payment_token):
-    payment = LigdicashPaymentWithRedirect(username=api_key, password=api_token)
+
+def verify_ligdicash_payment_token(api_key, api_token, payment_token, url=None):
+    payment = LigdicashPaymentWithRedirect(url, username=api_key, password=api_token)
     return payment.verify_token(payment_token)
