@@ -50,7 +50,6 @@ response = validate_ligdicash_payment(
     api_token="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZF9hcHAiOiIxMjQ5NiIsImlkX2Fib25uZSI6MzUzNDYyLCJkYXRlY3JlYXRpb25fYXBwIjoiMjAyMy0xMS0xMCAxNDo1NTo0NCJ9.vlSBW5zvwMAAaupXZrZi5GRrf79Ctuka6Rz1Uprbf54",
     command=command,
 )
-print(response)
 
 """
 eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZF9hcHAiOiIxMjQ5NiIsImlkX2Fib25uZSI6MzUzNDYyLCJkYXRlY3JlYXRpb25fYXBwIjoiMjAyMy0xMS0xMCAxNDo1NTo0NCJ9.vlSBW5zvwMAAaupXZrZi5GRrf79Ctuka6Rz1Uprbf54

@@ -16,6 +16,34 @@ from mobilemoney.ligdicash import (
 )
 
 
+def validate_moov_prod_payment(
+    username: str,
+    password: str,
+    phonenumber: str,
+    customer_phone: str,
+    customer_otp: str,
+    amount: int,
+    message: str,
+    url=None,
+):
+    payment = MMPayment(url, phonenumber, username, password)
+    return payment.validate_payment(customer_phone, customer_otp, amount, message)
+
+
+def validate_moov_dev_payment(
+    username: str,
+    password: str,
+    phonenumber: str,
+    customer_phone: str,
+    customer_otp: str,
+    amount: int,
+    message: str,
+    url=None,
+):
+    payment = MMDevPayment(url, phonenumber, username, password)
+    return payment.validate_payment(customer_phone, customer_otp, amount, message)
+
+
 def validate_om_prod_payment(
     username: str,
     password: str,
@@ -24,8 +52,9 @@ def validate_om_prod_payment(
     customer_otp: str,
     amount: int,
     message: str,
+    url=None,
 ):
-    payment = OMPayment(phonenumber, username, password)
+    payment = OMPayment(url, phonenumber, username, password)
     return payment.validate_payment(customer_phone, customer_otp, amount, message)
 
 
@@ -37,12 +66,18 @@ def validate_om_dev_payment(
     customer_otp: str,
     amount: int,
     message: str,
+    url=None,
 ):
-    payment = OMDevPayment(phonenumber, username, password)
+    payment = OMDevPayment(url, phonenumber, username, password)
     return payment.validate_payment(customer_phone, customer_otp, amount, message)
 
 
-def validate_ligdicash_payment(api_key, api_token, command):
+def validate_ligdicash_payment(
+    api_key,
+    api_token,
+    command,
+    url=None,
+):
     """
     Validate a payment
         - command param must be :
@@ -97,5 +132,5 @@ def validate_ligdicash_payment(api_key, api_token, command):
                 "wiki": "https://client.ligdicash.com/wiki/createInvoice",
             }
     """
-    payment = LigdicashPaymentWithRedirect(username=api_key, password=api_token)
+    payment = LigdicashPaymentWithRedirect(url, username=api_key, password=api_token)
     return payment.validate_payment(command)

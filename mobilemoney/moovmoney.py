@@ -58,9 +58,7 @@ class GenericPayment(BasePayment):
             },
         }
 
-    def _send_otp(
-        self, customer_phone: str, amount: int, verify_ssl=False, option=""
-    ):
+    def _send_otp(self, customer_phone: str, amount: int, verify_ssl=False, option=""):
         if option not in SEND_OTP_OPTIONS:
             raise ValueError(
                 f"'option' parameter must be one of '{','.join(SEND_OTP_OPTIONS)}'"
@@ -121,12 +119,12 @@ class GenericPayment(BasePayment):
 
 
 class DevPayment(GenericPayment):
-    def __init__(self, phonenumber="", username="", password=""):
-        url = onatel_dev_url
+    def __init__(self, url=None, phonenumber="", username="", password=""):
+        url = onatel_dev_url if url is None else url
         super().__init__(url, phonenumber, username, password)
 
 
 class Payment(GenericPayment):
-    def __init__(self, phonenumber="", username="", password=""):
-        url = onatel_prod_url
+    def __init__(self, url=None, phonenumber="", username="", password=""):
+        url = onatel_prod_url if url is None else url
         super().__init__(url, phonenumber, username, password)

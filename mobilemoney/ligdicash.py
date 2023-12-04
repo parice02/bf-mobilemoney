@@ -1,7 +1,9 @@
 from typing import Any, List, Union, Dict
+from pprint import pprint
+import webbrowser
 
 import requests  # TODO replace with urllib3
-import webbrowser
+
 
 from .base import BasePayment
 
@@ -89,6 +91,7 @@ class GenericPaymentWithRedirect(BasePayment):
             json={"commande": command},
             verify=verify_ssl,
         )
+        pprint(response.request.headers)
         response = response.json()
         response = webbrowser.open(response["response_text"], new=2)
 
@@ -129,5 +132,6 @@ class GenericPaymentWithRedirect(BasePayment):
 
 
 class Payment(GenericPaymentWithRedirect):
-    def __init__(self, username="", password=""):
-        super().__init__(ligdicash_prod_url_with_redirect, username, password)
+    def __init__(self, url=None, username="", password=""):
+        url = ligdicash_prod_url_with_redirect if url is None else url
+        super().__init__(url, username, password)
