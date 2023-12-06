@@ -24,9 +24,8 @@ def validate_moov_prod_payment(
     customer_otp: str,
     amount: int,
     message: str,
-    url=None,
 ):
-    payment = MMPayment(url, phonenumber, username, password)
+    payment = MMPayment(phonenumber, username, password)
     return payment.validate_payment(customer_phone, customer_otp, amount, message)
 
 
@@ -69,12 +68,7 @@ def validate_om_dev_payment(
     return payment.validate_payment(customer_phone, customer_otp, amount, message)
 
 
-def validate_ligdicash_payment(
-    api_key,
-    api_token,
-    command,
-    url=None,
-):
+def validate_ligdicash_payment(api_key, api_token, command):
     """
     Validate a payment
         - command param must be :
