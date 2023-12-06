@@ -38,9 +38,8 @@ def validate_moov_dev_payment(
     customer_otp: str,
     amount: int,
     message: str,
-    url=None,
 ):
-    payment = MMDevPayment(url, phonenumber, username, password)
+    payment = MMDevPayment(phonenumber, username, password)
     return payment.validate_payment(customer_phone, customer_otp, amount, message)
 
 
@@ -52,9 +51,8 @@ def validate_om_prod_payment(
     customer_otp: str,
     amount: int,
     message: str,
-    url=None,
 ):
-    payment = OMPayment(url, phonenumber, username, password)
+    payment = OMPayment(phonenumber, username, password)
     return payment.validate_payment(customer_phone, customer_otp, amount, message)
 
 
@@ -66,9 +64,8 @@ def validate_om_dev_payment(
     customer_otp: str,
     amount: int,
     message: str,
-    url=None,
 ):
-    payment = OMDevPayment(url, phonenumber, username, password)
+    payment = OMDevPayment(phonenumber, username, password)
     return payment.validate_payment(customer_phone, customer_otp, amount, message)
 
 
@@ -132,10 +129,10 @@ def validate_ligdicash_payment(
                 "wiki": "https://client.ligdicash.com/wiki/createInvoice",
             }
     """
-    payment = LigdicashPaymentWithRedirect(url, username=api_key, password=api_token)
+    payment = LigdicashPaymentWithRedirect(username=api_key, password=api_token)
     return payment.validate_payment(command)
 
 
-def verify_ligdicash_payment_token(api_key, api_token, payment_token, url=None):
-    payment = LigdicashPaymentWithRedirect(url, username=api_key, password=api_token)
+def verify_ligdicash_payment_token(api_key, api_token, payment_token):
+    payment = LigdicashPaymentWithRedirect(username=api_key, password=api_token)
     return payment.verify_token(payment_token)

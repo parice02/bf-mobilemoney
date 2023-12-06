@@ -102,12 +102,12 @@ class GenericPayment(BasePayment):
 
 
 class DevPayment(GenericPayment):
-    def __init__(self, url=None, phonenumber="", username="", password=""):
-        url = orange_dev_url if url is None else url
+    def __init__(self, phonenumber="", username="", password=""):
+        url = orange_dev_url
         super().__init__(url, phonenumber, username, password)
 
 
 class Payment(GenericPayment):
-    def __init__(self, url=None, phonenumber="", username="", password=""):
-        url = orange_prod_url if url is None else url
+    def __init__(self, phonenumber="", username="", password=""):
+        url = orange_prod_url
         super().__init__(url, phonenumber, username, password)

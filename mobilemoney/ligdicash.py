@@ -122,11 +122,11 @@ class GenericPaymentWithRedirect(BasePayment):
             print(e)
             response_body = dict()
 
-        if response_body.get("status", '') == "completed":
+        if response_body.get("status", "") == "completed":
             return True, response
-        if response_body.get("status", '') == "nocompleted":
+        if response_body.get("status", "") == "nocompleted":
             return False, response
-        if response_body.get("status", '') == "pending":
+        if response_body.get("status", "") == "pending":
             return None, response
         return None, response
 
@@ -144,6 +144,6 @@ class GenericPaymentWithRedirect(BasePayment):
 
 
 class Payment(GenericPaymentWithRedirect):
-    def __init__(self, url=None, username="", password=""):
-        url = ligdicash_prod_url_with_redirect if url is None else url
+    def __init__(self, username="", password=""):
+        url = ligdicash_prod_url_with_redirect
         super().__init__(url, username, password)
