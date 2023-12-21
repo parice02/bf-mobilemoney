@@ -103,7 +103,7 @@ class GenericPaymentWithRedirect(BasePayment):
         try:
             response = requests.get(
                 url,
-                data={"invoiceToken": token},
+                params={"invoiceToken": token},
                 headers=headers,
                 verify=verify_ssl,
             )
