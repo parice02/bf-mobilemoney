@@ -111,8 +111,8 @@ class GenericPaymentWithRedirect(BasePayment):
         response_body = dict()
         try:
             response = requests.get(
-                "https://app.ligdicash.com/pay/v01/redirect/checkout-invoice/confirm/",
-                data={"invoiceToken": token},
+                f"https://app.ligdicash.com/pay/v01/redirect/checkout-invoice/confirm/?invoiceToken={token}",
+                # data={"invoiceToken": token},
                 headers=headers,
                 verify=verify_ssl,
             )
