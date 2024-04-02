@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "bf-mobilemoney"
+name = "bf-mm"
 version = "0.0.1"
 description = ""
 authors = ["Muhammed Zeba <parice02@hotmail.com>"]

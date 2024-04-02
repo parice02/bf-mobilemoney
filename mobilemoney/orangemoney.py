@@ -6,7 +6,7 @@ import requests  # TODO replace with urllib3
 from .base import BasePayment
 
 orange_dev_url = "https://testom.orange.bf:9008/payment"
-orange_prod_url = "https://apiom.orange.bf:9007/payment"
+orange_prod_url = "https://apiom.orange.bf"
 
 
 class GenericPayment(BasePayment):
@@ -95,9 +95,15 @@ class GenericPayment(BasePayment):
     ):
         headers = {"content-type": "application/xml"}
         data = self.parse_query(customer_phone, customer_otp, amount, message)
-        response = requests.post(
-            self._url, headers=headers, data=data, verify=verify_ssl
-        )
+
+        try:
+            response = requests.post(
+                self._url, headers=headers, data=data, verify=verify_ssl
+            )
+        except:
+            return self.parse_result(
+                "<status>-100</status><message>Problème de requête</message><transID>OM.0000.0000.0000</transID>"
+            )
         return self.parse_result(response.text)
 
 
