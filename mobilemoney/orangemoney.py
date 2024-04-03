@@ -1,5 +1,3 @@
-from typing import Any, List, Union, Dict
-
 import xml.etree.ElementTree as ET
 import requests  # TODO replace with urllib3
 
@@ -55,35 +53,26 @@ class GenericPayment(BasePayment):
         return xml_string
 
     def parse_result(self, result: str):
-        import re
+        root = ET.fromstring("<root>" + result + "</root>")
 
-        # root = ET.Element("result")
-        # child = ET.fromstring(result)
-        # root.append(child)
+        status, message, trans_id = (
+            root.find("status"),
+            root.find("message"),
+            root.find("transID"),
+        )
 
-        # status, message = root.find("status"), root.find("message")
-
-        # if (status is not None) and (message is not None):
-        #     return {"status": status.text, "message": message.text}
-        # else:
-        #     return {
-        #         "message": "Erreur de retour de l'API OM",
-        #         "status": "500",
-        #     }
-
-        pattern = r"<status>(?P<status>.*)</status>.*?<message>(?P<message>.*)</message>.*?<transID>(?P<transID>.*)</transID>"
-        matches = re.search(pattern, result)
-        if matches:
+        if (status is not None) and (message is not None) and (trans_id is not None):
             return {
-                "status": matches["status"],
-                "message": matches["message"],
-                "trans_id": matches["transID"],
+                "status": status.text,
+                "message": message.text,
+                "trans_id": trans_id.text,
             }
-        return {
-            "message": "Erreur de retour de l'API OM",
-            "status": "500",
-            "trans_id": None,
-        }
+        else:
+            return {
+                "message": "Erreur de retour de l'API OM",
+                "status": "OM-500",
+                "trans_id": "Error",
+            }
 
     def validate_payment(
         self,
