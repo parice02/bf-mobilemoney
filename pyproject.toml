@@ -1,0 +1,24 @@
+[project]
+name = "bf-mobilemomey"
+version = "0.0.1"
+description = "Library for mobile money payment in Burkina Faso"
+authors = [
+    { name = "Mohamed ZEBA", email = "parice02@hotmail.com" },
+    { name = "Abdoul Kader KABORÉ", email = "derokabore@hotmail.com" },
+]
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+license.file = "LICENSE"
+
+[project.urls]
+Homepage = "https://github.com/parice02/bf-mobilemoney"
+Issues = "https://github.com/parice02/bf-mobilemoney/issues"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
