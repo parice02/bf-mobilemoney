@@ -16,6 +16,9 @@ from mobilemoney.ligdicash import (
 )
 
 
+__version__ = "0.0.1"
+
+
 def validate_moov_prod_payment(
     username: str,
     password: str,

@@ -1,23 +1,34 @@
 [project]
 name = "bf-mobilemomey"
-version = "0.0.1"
+#version = "0.0.1"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
 description = "Library for mobile money payment in Burkina Faso"
 authors = [
     { name = "Mohamed ZEBA", email = "parice02@hotmail.com" },
     { name = "Abdoul Kader KABORÉ", email = "derokabore@hotmail.com" },
 ]
-readme = "README.md"
+readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.8"
-classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
+dynamic = ["version"]
+license = { file = "LICENSE" }
+dependencies = ["requests>=2.31.0"]
+keywords = [
+    "orange money",
+    "ligdiash",
+    "burkina mobile money",
+    "mobile money",
+    "moov money",
 ]
-license.file = "LICENSE"
 
 [project.urls]
 Homepage = "https://github.com/parice02/bf-mobilemoney"
 Issues = "https://github.com/parice02/bf-mobilemoney/issues"
+Repository = "https://github.com/parice02/bf-mobilemoney.git"
 
 [build-system]
 requires = ["setuptools>=61.0"]
