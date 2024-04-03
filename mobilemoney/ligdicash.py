@@ -1,4 +1,3 @@
-import requests  # TODO replace with urllib3
 import json
 
 from mobilemoney.base import BasePayment
@@ -83,7 +82,7 @@ class GenericPaymentWithRedirect(BasePayment):
 
         response_body = dict()
         try:
-            response = requests.post(
+            response = self.post(
                 self._url,
                 headers=headers,
                 json={"commande": command},
@@ -106,7 +105,7 @@ class GenericPaymentWithRedirect(BasePayment):
         }
         response_body = dict()
         try:
-            response = requests.get(
+            response = self.get(
                 f"https://app.ligdicash.com/pay/v01/redirect/checkout-invoice/confirm/?invoiceToken={token}",
                 # data={"invoiceToken": token},
                 headers=headers,

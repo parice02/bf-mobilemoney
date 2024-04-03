@@ -1,5 +1,4 @@
 import xml.etree.ElementTree as ET
-import requests  # TODO replace with urllib3
 
 from mobilemoney.base import BasePayment
 
@@ -61,7 +60,7 @@ class GenericPayment(BasePayment):
             root.find("transID"),
         )
 
-        if (status is not None) and (message is not None) and (trans_id is not None):
+        if status and message and trans_id:
             return {
                 "status": status.text,
                 "message": message.text,
@@ -86,14 +85,14 @@ class GenericPayment(BasePayment):
         data = self.parse_query(customer_phone, customer_otp, amount, message)
 
         try:
-            response = requests.post(
+            response = self.post(
                 self._url, headers=headers, data=data, verify=verify_ssl
-            )
-        except:
-            return self.parse_result(
-                "<status>-100</status><message>Problème de requête</message><transID>OM.0000.0000.0000</transID>"
-            )
-        return self.parse_result(response.text)
+            ).text
+
+        except Exception as exp:
+            response = f"<status>-100</status><message>{exp.__str__()}</message><transID>OM.0000.0000.0000</transID>"
+
+        return self.parse_result(response)
 
 
 class DevPayment(GenericPayment):

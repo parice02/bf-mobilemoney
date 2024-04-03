@@ -1,4 +1,3 @@
-import requests  # TODO replace with urllib3
 from requests.auth import HTTPBasicAuth
 
 from mobilemoney.base import BasePayment
@@ -74,7 +73,7 @@ class GenericPayment(BasePayment):
             "command-id": option,
         }
 
-        response = requests.post(
+        response = self.post(
             self._url,
             headers=headers,
             json=data,
@@ -104,7 +103,7 @@ class GenericPayment(BasePayment):
             "command-id": "process-commit-otppay",
         }
 
-        response = requests.post(
+        response = self.post(
             self._url,
             headers=headers,
             json=self.parse_query(

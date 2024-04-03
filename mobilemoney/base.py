@@ -1,3 +1,6 @@
+import requests  # TODO replace with urllib3
+
+
 class BasePayment(object):
     """ """
 
@@ -14,6 +17,12 @@ class BasePayment(object):
         self._username = username
         self._password = password
         self._phonenumber = phonenumber
+
+    def post(self, url, **kwargs) -> requests.Response:
+        return requests.post(url, **kwargs)
+
+    def get(self, url, **kwargs) -> requests.Response:
+        return requests.get(url, **kwargs)
 
     @property
     def phonenumber(self):
