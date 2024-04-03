@@ -1,11 +1,7 @@
-from typing import Any, List, Union, Dict
-from pprint import pprint
-import webbrowser
-
 import requests  # TODO replace with urllib3
 import json
 
-from .base import BasePayment
+from mobilemoney.base import BasePayment
 
 ligdicash_dev_url_with_redirect = (
     "https://app.ligdicash.com/pay/v01/redirect/checkout-invoice/create"

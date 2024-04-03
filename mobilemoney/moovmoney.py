@@ -1,9 +1,7 @@
-from typing import Any, List, Union, Dict
-
 import requests  # TODO replace with urllib3
 from requests.auth import HTTPBasicAuth
 
-from .base import BasePayment
+from mobilemoney.base import BasePayment
 
 onatel_dev_url = "https://196.28.245.227/tlcfzc_gw/api/gateway/3pp/transaction/process"
 onatel_prod_url = (

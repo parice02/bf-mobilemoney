@@ -3,7 +3,7 @@ from typing import Any, List, Union, Dict
 import xml.etree.ElementTree as ET
 import requests  # TODO replace with urllib3
 
-from .base import BasePayment
+from mobilemoney.base import BasePayment
 
 orange_dev_url = "https://testom.orange.bf:9008/payment"
 orange_prod_url = "https://apiom.orange.bf"
