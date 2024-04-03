@@ -3,7 +3,7 @@ from typing import Any, List, Union, Dict
 import requests  # TODO replace with urllib3
 import json
 
-from .base import BasePayment
+from mobilemoney.base import BasePayment
 
 
 class GenericPaymentWithRedirect(BasePayment):

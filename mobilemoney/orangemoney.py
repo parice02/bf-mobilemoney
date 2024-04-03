@@ -3,7 +3,7 @@ from typing import Any, List, Union, Dict
 import xml.etree.ElementTree as ET
 import requests  # TODO replace with urllib3
 
-from .base import BasePayment
+from mobilemoney.base import BasePayment
 
 
 class GenericPayment(BasePayment):
@@ -58,10 +58,10 @@ class GenericPayment(BasePayment):
         # child = ET.fromstring(result)
         # root.append(child)
 
-        # status, message = root.find("status"), root.find("message")
+        # status, message, trans_id = root.find("status"), root.find("message"), root.find("transID")
 
         # if (status is not None) and (message is not None):
-        #     return {"status": status.text, "message": message.text}
+        #     return {"status": status.text, "message": message.text, "transID", trans_id.text}
         # else:
         #     return {
         #         "message": "Erreur de retour de l'API OM",
