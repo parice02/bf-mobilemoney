@@ -1,5 +1,3 @@
-from typing import Any, List, Union, Dict
-
 import xml.etree.ElementTree as ET
 import requests  # TODO replace with urllib3
 

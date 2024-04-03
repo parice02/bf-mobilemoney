@@ -1,6 +1,3 @@
-from typing import Any, List, Union, Dict
-
-
 class BasePayment(object):
     """ """
 
