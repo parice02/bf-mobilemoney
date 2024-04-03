@@ -6,7 +6,7 @@ API non officiel pour les paiements mobiles Orange Money, Moov Money et Ligdicas
 ## Avant l'installation
 
 1. Obtenir un compte API avec Orange/Moov/Ligdicash (username, password, phonenumber, certificats, ....)
-2. Installer les certificats fournis par l'opérateur s'il y'en
+2. Installer les certificats fournis par l'opérateur s'il y'en a
 
 
 ## Dépendances
