@@ -23,10 +23,12 @@ pip install https://github.com/parice02/bf-mobilemoney.git
 
 ## Cas d'utilisation
 
+### exemple de paiement avec Orange Money (Burkina Faso)
+
 ```python
 from mobilemoney import validate_om_prod_payment
 
-# exemple de paiement avec orange money
+
 
 username = "<Your OM API username>"
 password = "<Your OM API password>"
@@ -43,6 +45,40 @@ response = validate_om_prod_payment(
 print(response)
 ```
 
+
+### exemple de paiement avec Moov Money (Burkina Faso)
+
+```python
+from mobilemoney import MMPayment
+
+# exemple de paiement avec moov money
+
+username = "<Your OM API username>"
+password = "<Your OM API password>"
+phonenumber = "<Your OM API phone number>"
+customer_phone = "<Your customer phone number>"
+customer_otp = "<Your customer OTP code>"
+amount = "<the amount>"
+message = "<a message for user>"
+otp_trans_id = "<TRANS ID received during the last OTP generation>"
+
+moov = MMPayment(phonenumber, username, password)
+
+response = moov.send_otp(customer_phone, amount)
+print(response)
+
+response = moov.resend_otp(customer_phone, amount)
+print(response)
+
+response = moov.validate_payment(customer_phone, customer_otp, amount, message, otp_trans_id)
+print(response)
+```
+
 ## Contribution
 
 Les contributions sont libres.
+
+
+## Reste à faire
+
+1. Implémentation de tests
