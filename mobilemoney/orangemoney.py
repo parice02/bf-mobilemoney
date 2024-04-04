@@ -68,6 +68,13 @@ class GenericPayment(BasePayment):
 
         pattern = r"<status>(?P<status>.*)</status>.*?<message>(?P<message>.*)</message>.*?<transID>(?P<transID>.*)</transID>"
         matches = re.search(pattern, result)
+        print(result)
+        print(
+            matches,
+            matches["status"],
+            matches["message"],
+            matches["transID"],
+        )
         if matches:
             return {
                 "status": matches["status"],
