@@ -52,17 +52,13 @@ class GenericPayment(BasePayment):
     def parse_result(self, result: str):
         root = ET.fromstring("<root>" + result + "</root>")
 
-        print(root.text)
-
         status, message, trans_id = (
             root.find("status"),
             root.find("message"),
             root.find("transID"),
         )
 
-        print(status.text, message.text, trans_id.text)
-
-        if status and message and trans_id:
+        if (status is not None) and (message is not None) and (trans_id is not None):
             return {
                 "status": status.text,
                 "message": message.text,
@@ -88,7 +84,9 @@ class GenericPayment(BasePayment):
         response = requests.post(
             self._url, headers=headers, data=data, verify=verify_ssl
         )
-        return self.parse_result(response.text)
+        result = self.parse_result(response.text)
+        print("result api om ==> ", result)
+        return result
 
 
 class DevPayment(GenericPayment):
