@@ -60,7 +60,7 @@ class GenericPayment(BasePayment):
             root.find("transID"),
         )
 
-        if status and message and trans_id:
+        if (status is not None) and (message is not None) and (trans_id is not None):
             return {
                 "status": status.text,
                 "message": message.text,
