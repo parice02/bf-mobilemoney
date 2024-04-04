@@ -50,42 +50,30 @@ class GenericPayment(BasePayment):
         return xml_string
 
     def parse_result(self, result: str):
-        import re
+        root = ET.fromstring("<root>" + result + "</root>")
 
-        # root = ET.Element("result")
-        # child = ET.fromstring(result)
-        # root.append(child)
+        print(root.text)
 
-        # status, message, trans_id = root.find("status"), root.find("message"), root.find("transID")
-
-        # if (status is not None) and (message is not None):
-        #     return {"status": status.text, "message": message.text, "transID", trans_id.text}
-        # else:
-        #     return {
-        #         "message": "Erreur de retour de l'API OM",
-        #         "status": "500",
-        #     }
-
-        pattern = r"<status>(?P<status>.*)</status>.*?<message>(?P<message>.*)</message>.*?<transID>(?P<transID>.*)</transID>"
-        matches = re.search(pattern, result)
-        print(result)
-        print(
-            matches,
-            matches["status"],
-            matches["message"],
-            matches["transID"],
+        status, message, trans_id = (
+            root.find("status"),
+            root.find("message"),
+            root.find("transID"),
         )
-        if matches:
+
+        print(status.text, message.text, trans_id.text)
+
+        if status and message and trans_id:
             return {
-                "status": matches["status"],
-                "message": matches["message"],
-                "trans_id": matches["transID"],
+                "status": status.text,
+                "message": message.text,
+                "trans_id": trans_id.text,
             }
-        return {
-            "message": "Erreur de retour de l'API OM",
-            "status": "500",
-            "trans_id": None,
-        }
+        else:
+            return {
+                "message": "Erreur de retour de l'API OM",
+                "status": "OM-500",
+                "trans_id": "Error",
+            }
 
     def validate_payment(
         self,
