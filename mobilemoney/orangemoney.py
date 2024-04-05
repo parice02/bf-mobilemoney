@@ -27,7 +27,12 @@ class GenericPayment(BasePayment):
         del self._url
 
     def parse_query(
-        self, customer_phone: str, customer_otp: str, amount: int, libel: str
+        self,
+        customer_phone: str,
+        customer_otp: str,
+        amount: int,
+        libel: str,
+        reference: str,
     ):
         root = ET.Element("COMMAND")
 
@@ -44,7 +49,7 @@ class GenericPayment(BasePayment):
         ET.SubElement(root, "PAYID2").text = "12"
         ET.SubElement(root, "otp").text = f"{customer_otp}"
         ET.SubElement(root, "reference_number").text = libel
-        ET.SubElement(root, "ext_txn_id").text = ""
+        ET.SubElement(root, "ext_txn_id").text = reference
 
         tree = ET.ElementTree(root)
         xml_string = ET.tostring(root, encoding="utf-8").decode("utf-8")
