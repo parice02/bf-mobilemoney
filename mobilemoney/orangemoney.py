@@ -29,25 +29,6 @@ class GenericPayment(BasePayment):
         self, customer_phone: str, customer_otp: str, amount: int, libel: str
     ):
 
-        reference = datetime.now()
-        year, month, day, hour, minute, second, microsecond = (
-            reference.year,
-            reference.month,
-            reference.day,
-            reference.hour,
-            reference.minute,
-            reference.second,
-            reference.microsecond,
-        )
-        reference = (
-            str(year).zfill(4)
-            + str(month).zfill(2)
-            + str(day).zfill(2)
-            + str(hour).zfill(2)
-            + str(minute).zfill(2)
-            + str(second).zfill(2)
-            + str(microsecond).zfill(6)
-        )
         root = ET.Element("COMMAND")
 
         # Ajouter les éléments enfants à l'élément racine
@@ -63,7 +44,7 @@ class GenericPayment(BasePayment):
         ET.SubElement(root, "PAYID2").text = "12"
         ET.SubElement(root, "otp").text = f"{customer_otp}"
         ET.SubElement(root, "reference_number").text = libel
-        ET.SubElement(root, "ext_txn_id").text = reference
+        ET.SubElement(root, "ext_txn_id").text = ""
 
         tree = ET.ElementTree(root)
         xml_string = ET.tostring(root, encoding="utf-8").decode("utf-8")
@@ -105,8 +86,9 @@ class GenericPayment(BasePayment):
         response = requests.post(
             self._url, headers=headers, data=data, verify=verify_ssl
         )
+        print("API OM raw ==> ", response.text)
         result = self.parse_result(response.text)
-        print("result api om ==> ", result)
+        print("API OM processed ==> ", result)
         return result
 
 
