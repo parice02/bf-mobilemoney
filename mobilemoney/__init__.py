@@ -19,6 +19,7 @@ from mobilemoney.ligdicash import (
 def send_otp_for_moov_money_payment(
     username: str,
     password: str,
+    phonenumber: str,
     customer_phone: str,
     amount: int,
     url: str,
@@ -36,6 +37,7 @@ def send_otp_for_moov_money_payment(
 def validate_moov_prod_payment(
     username: str,
     password: str,
+    phonenumber: str,
     customer_phone: str,
     customer_otp: str,
     amount: int,
@@ -52,6 +54,7 @@ def validate_moov_prod_payment(
 def validate_moov_dev_payment(
     username: str,
     password: str,
+    phonenumber: str,
     customer_phone: str,
     customer_otp: str,
     amount: int,
