@@ -173,10 +173,10 @@ class GenericPayment(BasePayment):
 
 
 class DevPayment(GenericPayment):
-    def __init__(self, url, phonenumber="", username="", password=""):
-        super().__init__(url, phonenumber, username, password)
+    def __init__(self, url, username="", password=""):
+        super().__init__(url, username, password)
 
 
 class Payment(GenericPayment):
-    def __init__(self, url, phonenumber="", username="", password=""):
-        super().__init__(url, phonenumber, username, password)
+    def __init__(self, url, username="", password=""):
+        super().__init__(url, username, password)

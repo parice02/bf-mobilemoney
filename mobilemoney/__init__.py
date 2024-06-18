@@ -15,27 +15,27 @@ from mobilemoney.ligdicash import (
     Payment as LigdicashPaymentWithRedirect,
 )
 
+
 def send_otp_for_moov_money_payment(
     username: str,
     password: str,
-    phonenumber: str,
     customer_phone: str,
     amount: int,
     url: str,
     reference: str = None,
-    verify_ssl: bool  = True,
+    verify_ssl: bool = True,
     is_resend: bool = False,
 ):
-    payment = MMPayment(url, phonenumber, username, password)
+    payment = MMPayment(url, username, password)
     if is_resend:
         return payment.resend_otp(customer_phone, amount, verify_ssl, reference)
     else:
         return payment.send_otp(customer_phone, amount, verify_ssl, reference)
 
+
 def validate_moov_prod_payment(
     username: str,
     password: str,
-    phonenumber: str,
     customer_phone: str,
     customer_otp: str,
     amount: int,
@@ -43,14 +43,15 @@ def validate_moov_prod_payment(
     otp_trans_id,
     url,
 ):
-    payment = MMPayment(url, phonenumber, username, password)
-    return payment.validate_payment(customer_phone, customer_otp, amount, message, otp_trans_id)
+    payment = MMPayment(url, username, password)
+    return payment.validate_payment(
+        customer_phone, customer_otp, amount, message, otp_trans_id
+    )
 
 
 def validate_moov_dev_payment(
     username: str,
     password: str,
-    phonenumber: str,
     customer_phone: str,
     customer_otp: str,
     amount: int,
@@ -58,8 +59,10 @@ def validate_moov_dev_payment(
     otp_trans_id,
     url=None,
 ):
-    payment = MMDevPayment(url, phonenumber, username, password)
-    return payment.validate_payment(customer_phone, customer_otp, amount, message, otp_trans_id)
+    payment = MMDevPayment(url, username, password)
+    return payment.validate_payment(
+        customer_phone, customer_otp, amount, message, otp_trans_id
+    )
 
 
 def validate_om_prod_payment(
