@@ -171,6 +171,7 @@ class GenericPayment(BasePayment):
             auth=HTTPBasicAuth(self._username, self._password),
             verify=verify_ssl,
         )
+        print("Moov API validate payment", response.text)
         return response.json()
 
 
