@@ -116,6 +116,8 @@ class GenericPayment(BasePayment):
             verify=verify_ssl,
         )
 
+        print("Moov API (re)send OTP response", response.text)
+
         return response.json()
 
     def send_otp(
