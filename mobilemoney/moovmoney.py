@@ -116,6 +116,12 @@ class GenericPayment(BasePayment):
             verify=verify_ssl,
         )
 
+        print(
+            "Moov API (re)send OTP request header/body",
+            response.request.headers,
+            "/",
+            response.request.body,
+        )
         print("Moov API (re)send OTP response", response.text)
 
         return response.json()
@@ -170,6 +176,12 @@ class GenericPayment(BasePayment):
             ),
             auth=HTTPBasicAuth(self._username, self._password),
             verify=verify_ssl,
+        )
+        print(
+            "Moov API validate payment header/body",
+            response.request.headers,
+            "/",
+            response.request.body,
         )
         print("Moov API validate payment", response.text)
         return response.json()
