@@ -24,7 +24,7 @@ def send_otp_for_moov_money_payment(
     amount: int,
     url: str,
     reference: str = None,
-    verify_ssl: bool = True,
+    verify_ssl: bool = False,
     is_resend: bool = False,
 ):
     payment = MMPayment(url, username, password)
