@@ -1,5 +1,5 @@
 [project]
-name = "bf-mobilemomey"
+name = "bf-mobilemoney"
 #version = "0.0.1"
 classifiers = [
     "Development Status :: 4 - Beta",
