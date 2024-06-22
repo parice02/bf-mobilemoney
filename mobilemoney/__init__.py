@@ -28,7 +28,7 @@ def send_otp_for_moov_money_payment(
     is_resend: bool = False,
 ):
     payment = MMPayment(url, username, password)
-    if not is_resend:
+    if is_resend:
         return payment.resend_otp(customer_phone, amount, verify_ssl, reference)
     else:
         return payment.send_otp(customer_phone, amount, verify_ssl, reference)
