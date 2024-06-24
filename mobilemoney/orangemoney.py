@@ -86,9 +86,13 @@ class GenericPayment(BasePayment):
         response = requests.post(
             self._url, headers=headers, data=data, verify=verify_ssl
         )
-        print("API OM raw ==> ", response.text)
+
+        print("OM API payment request header", response.request.headers)
+        print("OM API payment request body", response.request.body.decode())
+        print("OM API payment response status", response.status_code)
+        print("OM API payment response content", response.text)
         result = self.parse_result(response.text)
-        print("API OM processed ==> ", result)
+        print("OM API payment response content parsed ", result)
         return result
 
 
