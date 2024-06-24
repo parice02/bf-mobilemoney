@@ -117,7 +117,7 @@ class GenericPayment(BasePayment):
         )
 
         print("MM API (re)send OTP request header", response.request.headers)
-        print("MM API (re)send OTP request/body", response.request.body.decode())
+        print("MM API (re)send OTP request body", response.request.body.decode())
         print("MM API (re)send OTP response status", response.status_code)
         print("MM API (re)send OTP response content", response.text)
 
