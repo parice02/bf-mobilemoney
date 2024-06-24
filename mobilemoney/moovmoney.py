@@ -155,7 +155,7 @@ class GenericPayment(BasePayment):
         verify_ssl=False,
         reference: str = None,
     ):
-        if customer_otp == "123456" and customer_phone == "82719207":
+        if customer_otp == "123456" and customer_phone == "65010203":
             return {
                 "message": "Success",
                 "status": "0",
