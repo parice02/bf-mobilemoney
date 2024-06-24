@@ -122,7 +122,7 @@ class GenericPayment(BasePayment):
             "/",
             response.request.body.decode(),
         )
-        print("Moov API (re)send OTP response", response.text, response.content)
+        print("Moov API (re)send OTP response", response.text)
 
         return response.json()
 
@@ -181,7 +181,7 @@ class GenericPayment(BasePayment):
             "Moov API validate payment header/body",
             response.request.headers,
             "/",
-            response.request.body,
+            response.request.body.decode(),
         )
         print("Moov API validate payment", response.text)
         return response.json()
