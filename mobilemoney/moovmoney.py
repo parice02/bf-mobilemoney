@@ -6,34 +6,6 @@ from requests.auth import HTTPBasicAuth
 from mobilemoney.base import BasePayment
 
 
-reference = datetime.now()
-
-year, month, day, hour, minute, second, microsecond = (
-    reference.year,
-    reference.month,
-    reference.day,
-    reference.hour,
-    reference.minute,
-    reference.second,
-    reference.microsecond,
-)
-default_reference = (
-    str(year).zfill(4)
-    + "."
-    + str(month).zfill(2)
-    + "."
-    + str(day).zfill(2)
-    + "."
-    + str(hour).zfill(2)
-    + "."
-    + str(minute).zfill(2)
-    + "."
-    + str(second).zfill(2)
-    + "."
-    + str(microsecond).zfill(6)
-)
-
-
 SEND_OTP_OPTIONS = [
     "process-mror-transaction",
     "process-mror-resend-otp",
@@ -69,6 +41,33 @@ class GenericPayment(BasePayment):
         otp_trans_id: str,
         reference: str = None,
     ):
+
+        reference = datetime.now()
+
+        year, month, day, hour, minute, second, microsecond = (
+            reference.year,
+            reference.month,
+            reference.day,
+            reference.hour,
+            reference.minute,
+            reference.second,
+            reference.microsecond,
+        )
+        default_reference = (
+            str(year).zfill(4)
+            + "."
+            + str(month).zfill(2)
+            + "."
+            + str(day).zfill(2)
+            + "."
+            + str(hour).zfill(2)
+            + "."
+            + str(minute).zfill(2)
+            + "."
+            + str(second).zfill(2)
+            + "."
+            + str(microsecond).zfill(6)
+        )
         return {
             "request-id": reference or default_reference,
             "destination": f"226{customer_phone}",
