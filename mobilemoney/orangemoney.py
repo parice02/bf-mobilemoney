@@ -1,8 +1,8 @@
 import xml.etree.ElementTree as ET
 import requests  # TODO replace with urllib3
-from datetime import datetime
 
 from mobilemoney.base import BasePayment
+from mobilemoney.utils import get_reference
 
 
 class GenericPayment(BasePayment):
@@ -44,7 +44,7 @@ class GenericPayment(BasePayment):
         ET.SubElement(root, "PAYID2").text = "12"
         ET.SubElement(root, "otp").text = f"{customer_otp}"
         ET.SubElement(root, "reference_number").text = libel
-        ET.SubElement(root, "ext_txn_id").text = ""
+        ET.SubElement(root, "ext_txn_id").text = get_reference()
 
         tree = ET.ElementTree(root)
         xml_string = ET.tostring(root, encoding="utf-8").decode("utf-8")
