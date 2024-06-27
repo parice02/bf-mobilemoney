@@ -1,8 +1,7 @@
 import xml.etree.ElementTree as ET
-import requests  # TODO replace with urllib3
-from datetime import datetime
 
 from mobilemoney.base import BasePayment
+from mobilemoney.utils import get_reference
 
 
 class GenericPayment(BasePayment):
@@ -82,44 +81,17 @@ class GenericPayment(BasePayment):
         verify_ssl=True,
     ):
 
-        reference = datetime.now()
-
-        year, month, day, hour, minute, second, microsecond = (
-            reference.year,
-            reference.month,
-            reference.day,
-            reference.hour,
-            reference.minute,
-            reference.second,
-            reference.microsecond,
-        )
-        default_reference = (
-            str(year).zfill(4)
-            + "."
-            + str(month).zfill(2)
-            + "."
-            + str(day).zfill(2)
-            + "."
-            + str(hour).zfill(2)
-            + "."
-            + str(minute).zfill(2)
-            + "."
-            + str(second).zfill(2)
-            + "."
-            + str(microsecond).zfill(6)
-        )
-
         if customer_otp == "123456" and customer_phone == "74010203":
             return {
                 "message": "Success",
                 "status": "200",
-                "trans_id": default_reference,
+                "trans_id": get_reference(),
             }
         else:
             return {
                 "message": "Fail",
                 "status": "00",
-                "trans_id": default_reference,
+                "trans_id": get_reference(),
             }
 
 
