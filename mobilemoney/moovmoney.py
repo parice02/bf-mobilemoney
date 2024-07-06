@@ -36,7 +36,7 @@ class GenericPayment(BasePayment):
         customer_phone: str,
         customer_otp: str,
         amount: int,
-        libel: str,
+        message: str,
         otp_trans_id: str,
         reference: str = None,
     ):
@@ -44,7 +44,7 @@ class GenericPayment(BasePayment):
             "request-id": reference or get_reference(),
             "destination": f"226{customer_phone}",
             "amount": f"{amount}",
-            "remarks": f"{libel}",
+            "remarks": f"{message}",
             "extended-data": {
                 "module": "MERCHOTPPAY",
                 "otp": f"{customer_otp}",
@@ -122,7 +122,7 @@ class GenericPayment(BasePayment):
         customer_otp: str,
         amount: int,
         message: str,
-        otp_trans_id,
+        otp_trans_id: str,
         verify_ssl=False,
         reference: str = None,
     ):
