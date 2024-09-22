@@ -88,7 +88,7 @@ class GenericPayment(BasePayment):
         )
 
         print("OM API payment request header", response.request.headers)
-        print("OM API payment request body", response.request.body.decode())
+        print("OM API payment request body", response.request.body)
         print("OM API payment response status", response.status_code)
         print("OM API payment response content", response.text)
         result = self.parse_result(response.text)

@@ -146,7 +146,7 @@ class GenericPayment(BasePayment):
             verify=verify_ssl,
         )
         print("MM API payment request header", response.request.headers)
-        print("MM API payment request body", response.request.body.decode())
+        print("MM API payment request body", response.request.body)
         print("MM API payment response status", response.status_code)
         print("MM API payment response content", response.text)
         return response.json()
