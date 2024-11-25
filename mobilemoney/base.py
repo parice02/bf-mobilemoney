@@ -19,10 +19,26 @@ class BasePayment(object):
         self._phonenumber = phonenumber
 
     def post(self, url, **kwargs) -> requests.Response:
-        return requests.post(url, **kwargs)
+        try:
+            response = requests.post(url, **kwargs)
+        except Exception as exp:
+            response = requests.Response()
+            response.status_code = 500
+            response.text = exp.__str__()
+            response.content = bytes(exp.__str__())
+            response.url = url
+        return response
 
     def get(self, url, **kwargs) -> requests.Response:
-        return requests.get(url, **kwargs)
+        try:
+            response = requests.get(url, **kwargs)
+        except Exception as exp:
+            response.status_code = 500
+            response.text = exp.__str__()
+            response.content = bytes(exp.__str__())
+            response.url = url
+
+        return response
 
     @property
     def phonenumber(self):
