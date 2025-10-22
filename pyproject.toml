@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "bf-mm"
+name = "bf-mobilemoney"
 version = "0.0.1"
 description = ""
 authors = ["Muhammed Zeba <parice02@hotmail.com>"]
@@ -8,7 +8,7 @@ packages = [{ include = "mobilemoney" }]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.13"
 requests = "^2.31.0"
 
 
