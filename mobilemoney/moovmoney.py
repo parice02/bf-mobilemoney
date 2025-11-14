@@ -43,7 +43,7 @@ class GenericPayment(BasePayment):
         return {
             "request-id": reference or get_reference(),
             "destination": f"226{customer_phone}",
-            "amount": f"{amount}",
+            "amount": amount,
             "remarks": f"{message}",
             "extended-data": {
                 "module": "MERCHOTPPAY",
