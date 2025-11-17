@@ -1,8 +1,11 @@
-import requests  # TODO replace with urllib3
+import logging
 from requests.auth import HTTPBasicAuth
 
 from mobilemoney.base import BasePayment
 from mobilemoney.utils import get_reference
+
+# Configure logging
+logger = logging.getLogger(__name__)
 
 
 SEND_OTP_OPTIONS = [
@@ -12,24 +15,47 @@ SEND_OTP_OPTIONS = [
 
 
 class GenericPayment(BasePayment):
+    """
+    Moov Money payment implementation.
+
+    This class handles Moov Money API interactions including
+    OTP sending, resending, and payment validation.
+
+    Attributes:
+        url (str): The Moov Money API endpoint URL
+    """
+
     def __init__(self, url="", username="", password=""):
+        """
+        Initialize Moov Money payment instance.
+
+        Args:
+            url (str, optional): API endpoint URL. Defaults to "".
+            username (str, optional): API username. Defaults to "".
+            password (str, optional): API password. Defaults to "".
+
+        Raises:
+            ValueError: If url is not a string.
+        """
         super().__init__(None, username, password)
 
         if not isinstance(url, str):
             raise ValueError("value 'url' must be type of 'str'")
+        if not url.strip():
+            logger.warning("Empty URL provided for Moov Money API")
         self._url = url
 
     @property
     def url(self):
+        """Get the API endpoint URL."""
         return self._url
 
     @url.setter
     def url(self, value):
+        """Set the API endpoint URL."""
+        if not isinstance(value, str):
+            raise ValueError("URL must be a string")
         self._url = value
-
-    @url.deleter
-    def url(self):
-        del self._url
 
     def parse_query(
         self,
@@ -40,17 +66,56 @@ class GenericPayment(BasePayment):
         otp_trans_id: str,
         reference: str = None,
     ):
+        """
+        Parse payment request data for Moov Money API.
+
+        Args:
+            customer_phone (str): Customer's phone number
+            customer_otp (str): Customer's OTP code
+            amount (int): Payment amount
+            message (str): Payment description/remarks
+            otp_trans_id (str): OTP transaction ID
+            reference (str, optional): Transaction reference. Auto-generated if None.
+
+        Returns:
+            dict: Request payload formatted for Moov Money API
+
+        Raises:
+            ValueError: If any parameter has invalid type or value
+        """
+        # Validate inputs
+        if not isinstance(customer_phone, str) or not customer_phone.strip():
+            raise ValueError("Customer phone number must be a non-empty string")
+        if not isinstance(customer_otp, str) or not customer_otp.strip():
+            raise ValueError("Customer OTP must be a non-empty string")
+        if not isinstance(amount, int) or amount <= 0:
+            raise ValueError("Amount must be a positive integer")
+        if not isinstance(message, str) or not message.strip():
+            raise ValueError("Message must be a non-empty string")
+        if not isinstance(otp_trans_id, str) or not otp_trans_id.strip():
+            raise ValueError("OTP transaction ID must be a non-empty string")
+        if reference is not None and not isinstance(reference, str):
+            raise ValueError("Reference must be a string or None")
+
+        # Normalize phone number (add country code if not present)
+        phone_number = customer_phone
+        if not phone_number.startswith("226"):
+            phone_number = f"226{customer_phone}"
+
+        logger.info(
+            f"Creating payment request for phone: {phone_number}, amount: {amount}"
+        )
         return {
             "request-id": reference or get_reference(),
-            "destination": f"226{customer_phone}",
+            "destination": phone_number,
             "amount": amount,
-            "remarks": f"{message}",
+            "remarks": message,
             "extended-data": {
                 "module": "MERCHOTPPAY",
-                "otp": f"{customer_otp}",
+                "otp": customer_otp,
                 "ext1": "Vous avez payé pour 1",
                 "ext2": "Vous avez payé pour 2",
-                "trans-id": f"{otp_trans_id}",
+                "trans-id": otp_trans_id,
             },
         }
 
@@ -62,37 +127,82 @@ class GenericPayment(BasePayment):
         option="",
         reference: str = None,
     ):
+        """
+        Internal method to send or resend OTP.
+
+        Args:
+            customer_phone (str): Customer's phone number
+            amount (int): Payment amount
+            verify_ssl (bool, optional): Whether to verify SSL certificates. Defaults to False.
+            option (str): OTP operation type (create or resend)
+            reference (str, optional): Transaction reference. Auto-generated if None.
+
+        Returns:
+            dict: API response
+
+        Raises:
+            ValueError: If option is not valid or inputs are invalid
+            requests.RequestException: If network request fails
+        """
         if option not in SEND_OTP_OPTIONS:
             raise ValueError(
                 f"'option' parameter must be one of '{','.join(SEND_OTP_OPTIONS)}'"
             )
-        data = {
-            "request-id": reference or get_reference(),
-            "destination": f"226{customer_phone}",
-            "amount": amount,
-            "remarks": "Merchant Payment with OTP",
-            "extended-data": {"module": "MERCHOTPPAY"},
-        }
 
-        headers = {
-            "content-type": "application/json",
-            "command-id": option,
-        }
+        # Validate inputs
+        if not isinstance(customer_phone, str) or not customer_phone.strip():
+            raise ValueError("Customer phone number must be a non-empty string")
+        if not isinstance(amount, int) or amount <= 0:
+            raise ValueError("Amount must be a positive integer")
+        if reference is not None and not isinstance(reference, str):
+            raise ValueError("Reference must be a string or None")
 
-        response = requests.post(
-            self._url,
-            headers=headers,
-            json=data,
-            auth=HTTPBasicAuth(self._username, self._password),
-            verify=verify_ssl,
-        )
+        # Normalize phone number
+        phone_number = customer_phone
+        if not phone_number.startswith("226"):
+            phone_number = f"226{customer_phone}"
 
-        print("MM API (re)send OTP request header", response.request.headers)
-        print("MM API (re)send OTP request body", response.request.body.decode())
-        print("MM API (re)send OTP response status", response.status_code)
-        print("MM API (re)send OTP response content", response.text)
+        try:
+            if not self._url:
+                raise ValueError("API URL not configured")
 
-        return response.json()
+            data = {
+                "request-id": reference or get_reference(),
+                "destination": phone_number,
+                "amount": amount,
+                "remarks": "Merchant Payment with OTP",
+                "extended-data": {"module": "MERCHOTPPAY"},
+            }
+
+            headers = {
+                "content-type": "application/json",
+                "command-id": option,
+            }
+
+            auth = HTTPBasicAuth(self._username, self._password)
+
+            response = self._make_request(
+                method="POST",
+                url=self._url,
+                headers=headers,
+                json_data=data,
+                auth=auth,
+                verify_ssl=verify_ssl,
+            )
+
+            response.raise_for_status()
+            return response.json()
+
+        except Exception as e:
+            self._logger.error(f"Error in _send_otp: {e}")
+            if "timeout" in str(e).lower():
+                return {"error": "Timeout de l'API Moov Money"}
+            elif "connection" in str(e).lower():
+                return {"error": "Erreur de connexion à l'API Moov Money"}
+            elif "http" in str(e).lower():
+                return {"error": f"Erreur HTTP: {e}"}
+            else:
+                return {"error": f"Erreur inattendue: {str(e)}"}
 
     def send_otp(
         self,
@@ -101,6 +211,19 @@ class GenericPayment(BasePayment):
         verify_ssl=False,
         reference: str = None,
     ):
+        """
+        Send OTP to customer for payment authorization.
+
+        Args:
+            customer_phone (str): Customer's phone number
+            amount (int): Payment amount
+            verify_ssl (bool, optional): Whether to verify SSL certificates. Defaults to False.
+            reference (str, optional): Transaction reference. Auto-generated if None.
+
+        Returns:
+            dict: API response containing OTP sending status
+        """
+        logger.info(f"Sending OTP to {customer_phone} for amount {amount}")
         return self._send_otp(
             customer_phone, amount, verify_ssl, SEND_OTP_OPTIONS[0], reference
         )
@@ -112,6 +235,19 @@ class GenericPayment(BasePayment):
         verify_ssl=False,
         reference: str = None,
     ):
+        """
+        Resend OTP to customer for payment authorization.
+
+        Args:
+            customer_phone (str): Customer's phone number
+            amount (int): Payment amount
+            verify_ssl (bool, optional): Whether to verify SSL certificates. Defaults to False.
+            reference (str, optional): Transaction reference. Auto-generated if None.
+
+        Returns:
+            dict: API response containing OTP resending status
+        """
+        logger.info(f"Resending OTP to {customer_phone} for amount {amount}")
         return self._send_otp(
             customer_phone, amount, verify_ssl, SEND_OTP_OPTIONS[1], reference
         )
@@ -123,40 +259,107 @@ class GenericPayment(BasePayment):
         amount: int,
         message: str,
         otp_trans_id: str,
-        verify_ssl=False,
         reference: str = None,
+        verify_ssl=False,
     ):
-        headers = {
-            "content-type": "application/json",
-            "command-id": "process-commit-otppay",
-        }
+        """
+        Validate and process payment through Moov Money API.
 
-        response = requests.post(
-            self._url,
-            headers=headers,
-            json=self.parse_query(
+        Args:
+            customer_phone (str): Customer's phone number
+            customer_otp (str): Customer's OTP code
+            amount (int): Payment amount
+            message (str): Payment description
+            otp_trans_id (str): OTP transaction ID from send_otp response
+            verify_ssl (bool, optional): Whether to verify SSL certificates. Defaults to False.
+            reference (str, optional): Transaction reference. Auto-generated if None.
+
+        Returns:
+            dict: API response with payment validation status
+
+        Raises:
+            requests.RequestException: If network request fails
+            ValueError: If input validation fails
+        """
+        try:
+            if not self._url:
+                raise ValueError("API URL not configured")
+
+            headers = {
+                "content-type": "application/json",
+                "command-id": "process-commit-otppay",
+            }
+
+            payload = self.parse_query(
                 customer_phone,
                 customer_otp,
                 amount,
                 message,
                 otp_trans_id,
                 reference,
-            ),
-            auth=HTTPBasicAuth(self._username, self._password),
-            verify=verify_ssl,
-        )
-        print("MM API payment request header", response.request.headers)
-        print("MM API payment request body", response.request.body)
-        print("MM API payment response status", response.status_code)
-        print("MM API payment response content", response.text)
-        return response.json()
+            )
+
+            auth = HTTPBasicAuth(self._username, self._password)
+
+            response = self._make_request(
+                method="POST",
+                url=self._url,
+                headers=headers,
+                json_data=payload,
+                auth=auth,
+                verify_ssl=verify_ssl,
+            )
+
+            response.raise_for_status()
+            return response.json()
+
+        except Exception as e:
+            self._logger.error(f"Payment validation error: {e}")
+            if "timeout" in str(e).lower():
+                return {"error": "Timeout de l'API Moov Money"}
+            elif "connection" in str(e).lower():
+                return {"error": "Erreur de connexion à l'API Moov Money"}
+            elif "http" in str(e).lower():
+                return {"error": f"Erreur HTTP: {e}"}
+            else:
+                return {"error": f"Erreur inattendue: {str(e)}"}
 
 
 class DevPayment(GenericPayment):
+    """
+    Development environment Moov Money payment implementation.
+
+    This class is intended for use in development/testing environments.
+    """
+
     def __init__(self, url, username="", password=""):
+        """
+        Initialize development Moov Money payment instance.
+
+        Args:
+            url (str): Development API endpoint URL
+            username (str, optional): Development API username. Defaults to "".
+            password (str, optional): Development API password. Defaults to "".
+        """
         super().__init__(url, username, password)
+        logger.info("Initialized Moov Money DevPayment instance")
 
 
 class Payment(GenericPayment):
+    """
+    Production environment Moov Money payment implementation.
+
+    This class is intended for use in production environments.
+    """
+
     def __init__(self, url, username="", password=""):
+        """
+        Initialize production Moov Money payment instance.
+
+        Args:
+            url (str): Production API endpoint URL
+            username (str, optional): Production API username. Defaults to "".
+            password (str, optional): Production API password. Defaults to "".
+        """
         super().__init__(url, username, password)
+        logger.info("Initialized Moov Money Payment instance")

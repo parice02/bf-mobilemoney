@@ -43,11 +43,18 @@ def validate_moov_prod_payment(
     amount: int,
     message: str,
     otp_trans_id: str,
+    reference: str,
     url,
 ):
     payment = MMPayment(url, username, password)
     return payment.validate_payment(
-        customer_phone, customer_otp, amount, message, otp_trans_id
+        customer_phone,
+        customer_otp,
+        amount,
+        message,
+        otp_trans_id,
+        reference,
+        verify_ssl=True,
     )
 
 
@@ -60,11 +67,18 @@ def validate_moov_dev_payment(
     amount: int,
     message: str,
     otp_trans_id,
-    url=None,
+    reference: str,
+    url: str,
 ):
     payment = MMDevPayment(url, username, password)
     return payment.validate_payment(
-        customer_phone, customer_otp, amount, message, otp_trans_id
+        customer_phone,
+        customer_otp,
+        amount,
+        message,
+        otp_trans_id,
+        reference,
+        verify_ssl=True,
     )
 
 
@@ -76,10 +90,13 @@ def validate_om_prod_payment(
     customer_otp: str,
     amount: int,
     message: str,
+    reference: str,
     url,
 ):
     payment = OMPayment(url, phonenumber, username, password)
-    return payment.validate_payment(customer_phone, customer_otp, amount, message)
+    return payment.validate_payment(
+        customer_phone, customer_otp, amount, message, reference, verify_ssl=True
+    )
 
 
 def validate_om_dev_payment(
@@ -90,10 +107,13 @@ def validate_om_dev_payment(
     customer_otp: str,
     amount: int,
     message: str,
+    reference: str,
     url,
 ):
     payment = OMDevPayment(url, phonenumber, username, password)
-    return payment.validate_payment(customer_phone, customer_otp, amount, message)
+    return payment.validate_payment(
+        customer_phone, customer_otp, amount, message, reference, verify_ssl=True
+    )
 
 
 def validate_ligdicash_payment(
